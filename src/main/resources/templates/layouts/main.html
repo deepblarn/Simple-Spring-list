@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="cat"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.springframework.org/security/tags"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" sec:authorize="isAuthenticated()" th:if="${#httpServletRequest.requestURI != '/login'}">
+    <a class="navbar-brand" th:href="@{/}">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">Logout<span class="sr-only">Logout</span></a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                <a class="nav-link" th:href="@{/register}">Registrar usuario</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="ui grey fixed inverted menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a th:href="|/shopping/cart|" class="right item" sec:authorize="isAuthenticated()">
+                <span style="color:black"><i class="shopping cart icon"></i></span>
+            </a>
+
+            <a th:href="|/login|" class="right item" sec:authorize="!isAuthenticated()">
+                <span style="color:black"><i class="key icon"></i></span>
+            </a>
+
+            <a href="javascript: document.logoutForm.submit()" class="right item" sec:authorize="isAuthenticated()">
+                    <span style="color:black"><i class="power icon"></i></span>
+            </a>
+        </div>
+
+        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+            <button type="submit" value="Sign Out" hidden="hidden"></button>
+        </form>
+    </div>
+</div>
+<div layout:fragment="content"></div>
+
+
+</body>
+</html>

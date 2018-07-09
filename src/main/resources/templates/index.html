@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/main"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="css/my-login.css">
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container" sec:authorize="!hasAuthority('ADMIN')">
+
+            <section style="margin-top: 200px;">
+                <form class="form-inline" method="POST" th:action="@{/add-expense}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="gasto" class="sr-only">Tipo de gasto</label>
+                        <input type="text" th:field="*{product.name}" class="form-control" id="gasto" placeholder="Tipo de gasto">
+                    </div>
+                    <div class="form-group" style="padding-left: 10px;">
+                        <label for="precio" class="sr-only">Precio</label>
+                        <input type="number" th:field="*{product.price}" step="0.01" class="form-control" id="precio" placeholder="Precio">
+                    </div>
+                    <input type="file" name="file" id="file" th:field="*{product.file}">
+                    <div class="form-group"style="padding-left: 10px;">
+                        <button type="submit" class="btn btn-primary">Añadir</button>
+                    </div>
+                </form>
+                <hr>
+                <div class="alert alert-warning" role="alert" th:if="${shopping.isEmpty()}">
+                    Necesitas añadir productos
+                </div>
+                <table class="table" th:if="${!shopping.isEmpty()}">
+                    <thead class="thead-dark" style="background: #212529; color:#FFF;">
+                    <tr>
+                        <th scope="col" class="">Nombre</th>
+                        <th scope="col" class="">Precio</th>
+                        <th scope="col" class="">Archivo</th>
+                        <th scope="col" class=""></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${shopping}">
+                        <th scope="row" th:text="${product.product.name}"></th>
+                        <td th:text="${product.product.price}"></td>
+                        <td><a th:href="@{'/files/' + ${product.product.file}}">&#9776;</a></td>
+                        <td>
+                            <a class="close" th:href="@{'/delete-product/' + ${product.product.id}}" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <hr>
+                <h2 th:text="@{'Total '} + ${total}"></h2>
+            </section>
+
+        </div>
+        <div class="container" sec:authorize="hasAuthority('ADMIN')">
+            <section style="margin-top: 200px;">
+
+                <table class="table">
+                    <thead class="thead-dark" style="background: #212529; color:#FFF;">
+                    <tr>
+                        <th scope="col" class="">Nombre</th>
+                        <th scope="col" class="">Apellido</th>
+                        <th scope="col" class="">Email</th>
+                        <th scope="col" class="">Ver actividad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <th scope="row" class="" th:text="${user.name}"></th>
+                        <td th:text="${user.lastname}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td>
+                            <a class="btn" style="background-color:transparent;" th:href="@{'/info/' + ${user.email}}">
+                                <span>&#x270E;</span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </section>
+
+        </div>
+
+    </div>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/my-login.js"></script>
+    <script src="./bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

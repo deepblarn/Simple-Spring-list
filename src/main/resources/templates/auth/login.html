@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="cat"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="layouts/main" xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="css/my-login.css">
+</head>
+<body>
+
+<div layout:fragment="content" class="my-login-page">
+
+    <section class="h-100">
+        <div class="container h-100">
+            <div class="row justify-content-md-center h-100 flex-c">
+                <div class="card-wrapper"style="margin-top:200px;">
+
+                    <div class="alert alert-danger" role="alert"
+                         th:unless="${#httpServletRequest.getParameter('error') == null}">
+                        Usuario o contraseña incorrectos
+                    </div>
+                    <div class="card fat">
+                        <div class="card-body">
+                            <h4 class="card-title">Login</h4>
+                            <form method="POST" th:action="@{/login}">
+
+                                <div class="form-group">
+                                    <label for="email">Correo</label>
+
+                                    <input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Contraseña</label>
+
+                                    <input id="password" type="password" class="form-control" name="password" required data-eye>
+                                </div>
+
+
+                                <div class="form-group no-margin">
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        Login
+                                    </button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <img src="img/logo-mov.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/my-login.js"></script>
+<script src="../bootstrap/js/bootstrap.js"></script>
+</body>
+</html>
